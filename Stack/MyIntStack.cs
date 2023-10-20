@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Http.Headers;
 using Unit4.CollectionsLib;
 
 namespace Stack

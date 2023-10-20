@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using Unit4.CollectionsLib;
 
 namespace Stack
