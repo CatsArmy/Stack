@@ -5,20 +5,28 @@ namespace Stack
 {
     internal class Program
     {
-        private static bool R = true;
+        private readonly static bool R = true;
         private static bool Debug
         {
             get
             {
-#if DEBUG
+             #if DEBUG
                 return true;
-#endif
+             #endif
                 return false;
             }
         }
 
 
         static void Main(string[] args)
+        {
+
+        }
+        static void MyIntStackTest()
+        {
+            //Todo Add Test Program
+        }
+        static void StackTest()
         {
             int[] sarr = { 1, 2, 4, 8, 16 };
             int[] stackarr = { 1, 2, 2, 1 };

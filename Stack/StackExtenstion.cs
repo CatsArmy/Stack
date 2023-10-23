@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlTypes;
 using Unit4.CollectionsLib;
 
 namespace Stack
@@ -324,6 +325,48 @@ namespace Stack
             string result = char.IsDigit(str[i]) ? str[i].ToString() : "";
             
             return result + GetDigits(str, ++i);
+        }
+
+        public static void SortedInsert(this Stack<int> stack, int value, int j = 0)
+        {
+            int[] s = stack.ToArray();
+            int[] arr = new int[s.Length + 1];
+            if (value < s[j])
+            {
+                for (int i = ++j; i < arr.Length; i++)
+                {
+                    arr[i] = s[--i];
+                }
+                return;
+            }
+            SortedInsert(stack, value, ++j);
+        }
+        public static void Sort(this Stack<int> stack)
+        {
+            stack = BubbleSort(stack.ToArray()).ToStack();
+        }
+        public static Stack<int> SortedStack(this Stack<int> stack)
+        {
+            return BubbleSort(stack.ToArray()).ToStack();
+        }
+        static int[] BubbleSort(int[] bubble)
+        {
+            int TempSort;
+            int tempIndx;
+            for (int i = 0; i < bubble.Length - 1; i++)
+            {
+                for (int j = 0; j < bubble.Length - 1; j++)
+                {//brute force go brrrrrrrrrrr
+                    tempIndx = j + 1;
+                    TempSort = bubble[j];
+                    if (bubble[tempIndx] < bubble[j])
+                    {
+                        bubble[j] = bubble[tempIndx];
+                        bubble[tempIndx] = TempSort;
+                    }
+                }
+            }
+            return bubble;
         }
 
     }
