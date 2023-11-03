@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Globalization;
+using System.Linq;
+using System.Runtime.InteropServices;
 using Unit4.CollectionsLib;
 
 namespace Stack
@@ -17,10 +20,55 @@ namespace Stack
             }
         }
 
-
         static void Main(string[] args)
         {
-
+            Queue<char> queue = "abcdefG".Create();
+            Queue<char> q = "gfedcba".Create();
+            Queue<char> cut = QueueExtenstion.Cut(queue, q);
+        }
+        static void QueueIntTest()
+        {
+            Queue<int> queue = new Queue<int>();
+            Random rand = new Random();
+            for (int i = 0; i < 10; i++)
+            {
+                queue.Insert(rand.Next(80, 100));
+            }
+            Console.WriteLine(queue);
+            int[] arr = { 1, 2, 3, 4, 5 };
+            Queue<int> queue2 = arr.ToQueue();
+            Console.WriteLine(queue2);
+            Console.WriteLine($"Queue Avarage:{queue.Avarage()}");
+            Console.WriteLine($"Queue2 Avarage: {queue2.Avarage()}");
+            Console.WriteLine($"Queue Min:{queue.Min()}");
+            Console.WriteLine($"Queue2 Min: {queue2.Min()}");
+            int head = queue.Head();
+            Console.WriteLine($"Queue {head} Was Counted :{queue.CountNum(head)} Times");
+            head = queue2.Head();
+            Console.WriteLine($"Queue2 {head} Was Counted :{queue2.CountNum(head)} Times");
+            int[] count = new int[10];
+            for (int i = 0; i < count.Length; i++)
+            {
+                count[i] = queue.CountDigit(Digit.Digits[i]);
+            }
+            int max = count[0];
+            int maxIndex = 0;
+            max = count.Max();
+            for (int i = 0; i < count.Length; i++)
+            {
+                if (max == count[i])
+                {
+                    maxIndex = i;
+                }
+            }
+            Console.WriteLine($"Most Common Digit:{maxIndex} Showed up: {max}");
+            Console.WriteLine(queue);
+            Console.WriteLine(queue2);
+            Console.WriteLine("Multiplying all of queue numbers by -1");
+            queue.Mult(-1);
+            Console.WriteLine("Removing Negetive numbers");
+            queue.RemoveNegetiveNumbers();
+            Console.WriteLine(queue);
         }
         static void MyIntStackTest()
         {

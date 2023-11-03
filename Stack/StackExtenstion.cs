@@ -1,5 +1,8 @@
-﻿using System;
-using System.Data.SqlTypes;
+﻿using Microsoft.Win32;
+using System;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Security;
 using Unit4.CollectionsLib;
 
 namespace Stack
@@ -13,13 +16,13 @@ namespace Stack
         {
             Console.WriteLine("Enter any int\nEnter \"S\" to stop");
             string input = Console.ReadLine();
-            if (input == "s" || input == "S") return stack;
+            if (input.ToLower() == "s") return stack;
             if (int.TryParse(input, out int value)) stack.Push(value);
 
             Console.Clear();
             return Create(stack);
         }
-
+        
         private static int Count(Stack<int> stack, Stack<int> s, int count = 0)
         {
             if (stack.IsEmpty())
@@ -326,9 +329,33 @@ namespace Stack
             
             return result + GetDigits(str, ++i);
         }
-
-        public static void SortedInsert(this Stack<int> stack, int value, int j = 0)
+        public static void Sort(this Stack<int> stack)
         {
+            if (stack.IsEmpty()) return;
+            int value = stack.Pop();
+            Sort(stack);
+            SortedInsert(stack, value);
+        }
+
+        public static void SortedInsert(this Stack<int> stack, int value)
+        {
+            if (stack.IsEmpty() || value > stack.Top())
+            {
+                stack.Push(value);
+                return;
+            }
+            int val = stack.Pop();
+            SortedInsert(stack, value);
+            stack.Push(val);
+        }
+        /*
+        public static void SortedInsert(this Stack<int> stack, int value, int j = 0, bool NoArr = true)
+        {
+            if (NoArr)
+            {
+                SortedInsert(stack, value, new Stack<int>());
+                return;
+            }
             int[] s = stack.ToArray();
             int[] arr = new int[s.Length + 1];
             if (value < s[j])
@@ -337,17 +364,57 @@ namespace Stack
                 {
                     arr[i] = s[--i];
                 }
+                stack = arr.ToStack();
                 return;
             }
             SortedInsert(stack, value, ++j);
         }
-        public static void Sort(this Stack<int> stack)
+        public static void SortedInsert(Stack<int> stack, int value, Stack<int> s)
         {
+            if (stack.IsEmpty())
+            {
+                stack.Push(value);
+                stack.Fix(s);
+                return;
+            }
+            int val = stack.Pop();
+            s.Push(val);
+            if (value < val)
+            {
+                stack.Push(value);
+                stack.Fix(s);
+                return;
+            }
+            SortedInsert(stack, value, s);
+        }*/
+        /*public static void Sort(this Stack<int> stack, bool NoArr = true)
+        {
+            if (NoArr)
+            {
+                Sort(stack, new Stack<int>());
+                return;
+            }
             stack = BubbleSort(stack.ToArray()).ToStack();
         }
+        public static void Sort(Stack<int> stack,Stack<int> s, int i = 0)
+        {
+            int count = stack.Count();
+            if (i == --count)
+            {
+                return;
+            }
+            int value = stack.Pop();
+            int next = stack.Top();
+            if (next < value)
+            {
+                stack.Push(next);
+            }//need help
+        }*/
         public static Stack<int> SortedStack(this Stack<int> stack)
         {
-            return BubbleSort(stack.ToArray()).ToStack();
+            Stack<int> copy = stack.Copy();
+            copy.Sort();
+            return copy;
         }
         static int[] BubbleSort(int[] bubble)
         {
@@ -368,6 +435,23 @@ namespace Stack
             }
             return bubble;
         }
-
     }
+}
+public static class IntExtenstion
+{
+    public static bool IsPositive(this int value) => value > 0;
+    public static bool IsNegetive(this int value) => value < 0;
+}
+public enum Digits
+{
+    Zero,
+    One,
+    Two,
+    Three,
+    Four,
+    Five,
+    Six,
+    Seven,
+    Eight,
+    Nine
 }

@@ -46,9 +46,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Digit.cs" />
     <Compile Include="MyIntStack.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueueExtenstion.cs" />
     <Compile Include="StackExtenstion.cs" />
   </ItemGroup>
   <ItemGroup>
