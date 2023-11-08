@@ -22,9 +22,10 @@ namespace Stack
 
         static void Main(string[] args)
         {
-            Queue<char> queue = "abcdefG".Create();
-            Queue<char> q = "gfedcba".Create();
-            Queue<char> cut = QueueExtenstion.Cut(queue, q);
+            MyQueue.Program();
+            //Queue<char> queue = "abcdefG".Create();
+            //Queue<char> q = "gfedcba".Create();
+            //Queue<char> cut = QueueExtenstion.Cut(queue, q);
         }
         static void QueueIntTest()
         {

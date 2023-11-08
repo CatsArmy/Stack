@@ -1,15 +1,11 @@
 ﻿using Stack;
 using System;
-using System.Data.SqlClient;
-using System.Deployment.Internal;
-using System.Net;
-using System.Net.Http.Headers;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.AccessControl;
 using Unit4.CollectionsLib;
 
 public static class QueueExtenstion
 {
+    #region Queue<int>
     public static int Count(this Queue<int> queue, bool Recursive = true)
     {
         Queue<int> stash = new Queue<int>();
@@ -178,44 +174,6 @@ public static class QueueExtenstion
         stash.Insert(value);
         return Min(queue, stash, min);
     }
-    internal static void Fix(this Queue<int> queue, Queue<int> stash, Queue<int> other = null, bool Recursive = false)
-    {
-        int value;
-        if (Recursive)
-        {
-            if (stash.IsEmpty()) return;
-            value = stash.Remove();
-            queue.Insert(value);
-            other?.Insert(value);
-            Fix(queue, stash, other);
-        }
-
-        while (!stash.IsEmpty())
-        {
-            value = stash.Remove();
-            queue.Insert(value);
-            other?.Insert(value);
-        }
-    }
-    internal static void Fix(this Queue<char> queue, Queue<char> stash, Queue<char> other = null, bool Recursive = false)
-    {
-        char value;
-        if (Recursive)
-        {
-            if (stash.IsEmpty()) return;
-            value = stash.Remove();
-            queue.Insert(value);
-            other?.Insert(value);
-            Fix(queue, stash, other);
-        }
-
-        while (!stash.IsEmpty())
-        {
-            value = stash.Remove();
-            queue.Insert(value);
-            other?.Insert(value);
-        }
-    }
     public static int RemoveNegetiveNumbers(this Queue<int> queue) => RemoveNegetiveNumbers(queue, new Queue<int>());
     private static int RemoveNegetiveNumbers(this Queue<int> queue, Queue<int> stash)
     {
@@ -274,6 +232,26 @@ public static class QueueExtenstion
         SortedInsert(queue, value);
         queue.Insert(val);
     }
+    internal static void Fix(this Queue<int> queue, Queue<int> stash, Queue<int> other = null, bool Recursive = false)
+    {
+        int value;
+        if (Recursive)
+        {
+            if (stash.IsEmpty()) return;
+            value = stash.Remove();
+            queue.Insert(value);
+            other?.Insert(value);
+            Fix(queue, stash, other);
+        }
+
+        while (!stash.IsEmpty())
+        {
+            value = stash.Remove();
+            queue.Insert(value);
+            other?.Insert(value);
+        }
+    }
+    
     public static void SortedInsert(this Queue<char> queue, char value)
     {
         if (queue.IsEmpty())
@@ -335,12 +313,7 @@ public static class QueueExtenstion
         Sort(queue);
         SortedInsert(queue, value);
     }
-    public static Queue<char> SortQueue(this Queue<char> queue)
-    {
-        Queue<char> copy = queue.Copy();
-        copy.Sort();
-        return copy;
-    }
+    
     public static Queue<int> SortQueue(this Queue<int> queue)
     {
         Queue<int> copy = queue.Copy();
@@ -349,33 +322,17 @@ public static class QueueExtenstion
     }
     public static Queue<int> Copy(this Queue<int> queue)
     {
-        return Copy(queue, new Queue<int>());
+        return Copy(queue, new Queue<int>(), new Queue<int>());
     }
-    private static Queue<int> Copy(this Queue<int> queue, Queue<int> copy)
-    {
-        if (queue.IsEmpty())
-        {
-            queue.Fix(copy, copy);
-            return copy;
-        }
-        int value = queue.Remove();
-        copy.Insert(value);
-        return Copy(queue, copy);
-    }
-    public static Queue<char> Copy(this Queue<char> queue)
-    {
-        return Copy(queue, new Queue<char>(), new Queue<char>());
-    }
-    private static Queue<char> Copy(Queue<char> queue, Queue<char> stash, Queue<char> copy)
+    private static Queue<int> Copy(this Queue<int> queue, Queue<int> stash, Queue<int> copy)
     {
         if (queue.IsEmpty())
         {
             queue.Fix(stash, copy);
             return copy;
         }
-        char value = queue.Remove();
+        int value = queue.Remove();
         stash.Insert(value);
-        copy.Insert(value);
         return Copy(queue, stash, copy);
     }
     public static double Avarage(this Queue<int> queue)
@@ -392,6 +349,24 @@ public static class QueueExtenstion
         }
         q.Insert(queue.Remove() * mult);
     }
+    #endregion
+    #region Queue<char>
+    public static Queue<char> Copy(this Queue<char> queue)
+    {
+        return Copy(queue, new Queue<char>(), new Queue<char>());
+    }
+    private static Queue<char> Copy(Queue<char> queue, Queue<char> stash, Queue<char> copy)
+    {
+        if (queue.IsEmpty())
+        {
+            queue.Fix(stash, copy);
+            return copy;
+        }
+        char value = queue.Remove();
+        stash.Insert(value);
+        return Copy(queue, stash, copy);
+    }
+
 
     public static Queue<char> Create(Queue<char> queue)
     {
@@ -501,8 +476,8 @@ public static class QueueExtenstion
     {
         return Cut(queue.Copy().RemoveDuplicates(), q.Copy().RemoveDuplicates(), new Queue<char>());
     }
-    
-    private static Queue<char> Cut(this Queue<char> queue, Queue<char> q,Queue<char> cut)
+
+    private static Queue<char> Cut(this Queue<char> queue, Queue<char> q, Queue<char> cut)
     {
         if (queue.IsEmpty() && q.IsEmpty())
         {
@@ -564,4 +539,85 @@ public static class QueueExtenstion
         clean.Insert(c);
         return RemoveDuplicates(queue, stash, clean);
     }
+    internal static void Fix(this Queue<char> queue, Queue<char> stash, Queue<char> other = null, bool Recursive = false)
+    {
+        char value;
+        if (Recursive)
+        {
+            if (stash.IsEmpty()) return;
+            value = stash.Remove();
+            queue.Insert(value);
+            other?.Insert(value);
+            Fix(queue, stash, other);
+        }
+
+        while (!stash.IsEmpty())
+        {
+            value = stash.Remove();
+            queue.Insert(value);
+            other?.Insert(value);
+        }
+    }
+    public static Queue<char> SortQueue(this Queue<char> queue)
+    {
+        Queue<char> copy = queue.Copy();
+        copy.Sort();
+        return copy;
+    }
+
+    #endregion
+    #region Queue<string>
+    public static Queue<string> Copy(this Queue<string> queue)
+    {
+        return Copy(queue, new Queue<string>(), new Queue<string>());
+    }
+    private static Queue<string> Copy(Queue<string> queue, Queue<string> stash, Queue<string> copy)
+    {
+        if (queue.IsEmpty())
+        {
+            queue.Fix(stash, copy);
+            return copy;
+        }
+        string value = queue.Remove();
+        stash.Insert(value);
+        return Copy(queue, stash, copy);
+    }
+    internal static void Fix(this Queue<string> queue, Queue<string> stash, Queue<string> other = null, bool Recursive = false)
+    {
+        string value;
+        if (Recursive)
+        {
+            if (stash.IsEmpty()) return;
+            value = stash.Remove();
+            queue.Insert(value);
+            other?.Insert(value);
+            Fix(queue, stash, other);
+        }
+
+        while (!stash.IsEmpty())
+        {
+            value = stash.Remove();
+            queue.Insert(value);
+            other?.Insert(value);
+        }
+
+    }
+    public static Queue<string> ToQueue(this Stack<string> stack)
+    {
+        return ToQueue(stack, new Stack<string>(), new Queue<string>());
+    }
+    public static Queue<string> ToQueue(this Stack<string> stack, Stack<string> stash, Queue<string> queue)
+    {
+        if (stack.IsEmpty())
+        {
+            stack.Fix(stash);
+            return queue;
+        }
+        string str = stack.Pop();
+        queue.Insert(str);
+        stash.Push(str);
+        return ToQueue(stack, stash, queue);
+    }
+
+    #endregion
 }

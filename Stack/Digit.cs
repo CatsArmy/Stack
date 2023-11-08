@@ -47,3 +47,17 @@ public struct Digit
     public static Digit[] Digits = AllDigits();
     
 }
+
+public enum Digits
+{
+    Zero,
+    One,
+    Two,
+    Three,
+    Four,
+    Five,
+    Six,
+    Seven,
+    Eight,
+    Nine
+}

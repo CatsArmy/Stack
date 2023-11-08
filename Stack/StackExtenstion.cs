@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Globalization;
+using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
 using System.Security;
 using Unit4.CollectionsLib;
@@ -9,6 +10,7 @@ namespace Stack
 {
     public static class StackExtenstion
     {
+        #region Stack<int>
         public static Stack<int> Create() => Create(new Stack<int>());
 
         //Nice lil challange for my self Code is safe clean and short recursive is fun
@@ -246,10 +248,39 @@ namespace Stack
             stack.Fix(s);
             return spill;
         }
+        internal static void Fix(this Stack<string> stack, Stack<string> s)
+        {
+            string value;
+                if (s.IsEmpty()) return;
+                value = s.Pop();
+                stack.Push(value);
+//                other?.Push(value);
+                Fix(stack, s);
 
+        }
         internal static void Fix(this Stack<int> stack, Stack<int> s, Stack<int> other = null, bool Recursive = false)
         {
             int value;
+            if (Recursive)
+            {
+                if (s.IsEmpty()) return;
+                value = s.Pop();
+                stack.Push(value);
+                other?.Push(value);
+                Fix(stack, s, other);
+            }
+
+            while (!s.IsEmpty())
+            {
+                value = s.Pop();
+                stack.Push(value);
+                other?.Push(value);
+            }
+        }
+        
+        internal static void Fix(this Stack<Car> stack, Stack<Car> s, Stack<Car> other = null, bool Recursive = false)
+        {
+            Car value;
             if (Recursive)
             {
                 if (s.IsEmpty()) return;
@@ -435,23 +466,38 @@ namespace Stack
             }
             return bubble;
         }
+#endregion
+        #region Stack<Car>
+        public static void RemoveYear(this Stack<Car> stack, int year)
+        {
+            RemoveYear(stack, new Stack<Car>(), year);
+        }
+        private static void RemoveYear(Stack<Car> stack, Stack<Car> stash, int year)
+        {
+            if (stack.IsEmpty())
+            {
+                stack.Fix(stash);
+                return;
+            }
+            Car car = stack.Pop();
+            if (car.year < year)
+            {
+                RemoveYear(stack, stack, year);
+                return;
+            }
+            stash.Push(car);
+        }
+        public static void SortedInsert(this Stack<Car> stack, Car value)
+        {
+            if (stack.IsEmpty() || value > stack.Top())
+            {
+                stack.Push(value);
+                return;
+            }
+            Car val = stack.Pop();
+            SortedInsert(stack, value);
+            stack.Push(val);
+        }
+        #endregion
     }
-}
-public static class IntExtenstion
-{
-    public static bool IsPositive(this int value) => value > 0;
-    public static bool IsNegetive(this int value) => value < 0;
-}
-public enum Digits
-{
-    Zero,
-    One,
-    Two,
-    Three,
-    Four,
-    Five,
-    Six,
-    Seven,
-    Eight,
-    Nine
 }
