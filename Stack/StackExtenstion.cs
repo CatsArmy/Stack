@@ -3,6 +3,7 @@ using System;
 using System.Globalization;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security;
 using Unit4.CollectionsLib;
 
@@ -468,11 +469,11 @@ namespace Stack
         }
 #endregion
         #region Stack<Car>
-        public static void RemoveYear(this Stack<Car> stack, int year)
+        public static void PopYear(this Stack<Car> stack, int year)
         {
-            RemoveYear(stack, new Stack<Car>(), year);
+            PopYear(stack, new Stack<Car>(), year);
         }
-        private static void RemoveYear(Stack<Car> stack, Stack<Car> stash, int year)
+        private static void PopYear(Stack<Car> stack, Stack<Car> stash, int year)
         {
             if (stack.IsEmpty())
             {
@@ -482,12 +483,12 @@ namespace Stack
             Car car = stack.Pop();
             if (car.year < year)
             {
-                RemoveYear(stack, stack, year);
+                PopYear(stack, stack, year);
                 return;
             }
             stash.Push(car);
         }
-        public static void SortedInsert(this Stack<Car> stack, Car value)
+        public static void SortedPush(this Stack<Car> stack, Car value)
         {
             if (stack.IsEmpty() || value > stack.Top())
             {
@@ -495,8 +496,105 @@ namespace Stack
                 return;
             }
             Car val = stack.Pop();
-            SortedInsert(stack, value);
+            SortedPush(stack, value);
             stack.Push(val);
+        }
+        public static void Sort(this Stack<Car> stack)
+        {
+            if (stack.IsEmpty()) return;
+            Car value = stack.Pop();
+            Sort(stack);
+            SortedPush(stack, value);
+        }
+        public static void StarModel(this Stack<Car> stack, string model)
+        {
+            if (stack.IsEmpty()) return;
+            StarModel(stack, stack.Pop(), model);
+        }
+        private static void StarModel(this Stack<Car> stack, Car value, string model)
+        {
+            if (stack.IsEmpty() || value.model == model)
+            {
+                stack.Push(value);
+                return;
+            }
+            Car val = stack.Pop();
+            StarModel(stack, value, model);
+            stack.Push(val);
+        }
+        public static Stack<Car> UniqueModels(this Stack<Car> stack, Stack<Car> s)
+        {
+            return UniqueModels(stack.Copy(), s.Copy(), new Stack<Car>());
+        }
+        private static Stack<Car> UniqueModels(Stack<Car> stack, Stack<Car> s, Stack<Car> result)
+        {
+            if (stack.IsEmpty())
+            {
+                return result;
+            }
+            Car value = stack.Pop();
+            if (s.Contains(value.model))
+            {
+                stack.Pop(value.model);
+                s.Pop(value.model);
+                return UniqueModels(stack, s, result);
+            }
+            result.Push(value);
+            return UniqueModels(stack, s, result);
+        }
+        public static bool Contains(this Stack<Car> stack, string model)
+        {
+            return Contains(stack, new Stack<Car>(), model);
+        }
+        private static bool Contains(this Stack<Car> stack,  Stack<Car> stash, string model)
+        {
+            if (stack.IsEmpty())
+            {
+                stack.Fix(stash);
+                return false;
+            }
+            Car value = stack.Pop();
+            stash.Push(value);
+            if (value.model == model)
+            {
+                stack.Fix(stash);
+                return true;
+            }
+            return Contains(stack, stash, model);
+        }
+        public static void Pop(this Stack<Car> stack, string model)
+        {
+            Pop(stack, new Stack<Car>(), model);
+        }
+        private static int Pop(this Stack<Car> stack, Stack<Car> stash, string model)
+        {
+            if (stack.IsEmpty())
+            {
+                stack.Fix(stash);
+                return 0;
+            }
+            Car value = stack.Pop();
+            if (value.model == model)
+            {
+                return Pop(stack, stash, model);
+            }
+            stash.Push(value);
+            return Pop(stack, stack, model);
+        }
+        public static Stack<Car> Copy(this Stack<Car> queue)
+        {
+            return Copy(queue, new Stack<Car>(), new Stack<Car>());
+        }
+        private static Stack<Car> Copy(Stack<Car> stack, Stack<Car> stash, Stack<Car> copy)
+        {
+            if (stack.IsEmpty())
+            {
+                stack.Fix(stash, copy);
+                return copy;
+            }
+            Car value = stack.Pop();
+            stash.Push(value);
+            return Copy(stack, stash, copy);
         }
         #endregion
     }
